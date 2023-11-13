@@ -1,0 +1,39 @@
+{{template "base" .}}
+
+{{define "title"}}
+	{{if .Category}}
+		#{{.Category.Name}}
+	{{else}}
+		Home
+	{{end}}
+{{end}}
+
+{{define "body"}}
+	<h2>{{if .Category}}#{{.Category.Name}}{{else}}All{{end}} Posts</h2>
+	{{if .Categories}}
+		<label>Categories:</label>
+		{{range .Categories}}
+			<a href='/categories/{{.ID}}'><strong>#{{.Name}}</strong></a>
+		{{end}}
+	{{end}}
+	{{if .Posts}}
+		<table>
+			<tr>
+				<th>Title</th>
+				<th>Created</th>
+				<th>Author</th>
+				<th>ID</th>
+			</tr>
+			{{range .Posts}}
+				<tr>
+					<td><a href='/posts/{{.ID}}'>{{.Title}}</a></td>
+					<td>{{humanDate .Created}}</td>
+					<td>{{.Author}}</td>
+					<td>{{.ID}}</td>
+				</tr>
+			{{end}}
+		</table>
+	{{else}}
+		<p>There's nothing to see here yet!</p>
+	{{end}}
+{{end}}

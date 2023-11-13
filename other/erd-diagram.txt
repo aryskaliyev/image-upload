@@ -1,0 +1,56 @@
+Table useraccount {
+  user_id int [primary key]
+  username varchar(30) [not null] // unique
+  email varchar (255) [not null] // unique
+  passhash char(64) [not null]
+  created timestamp [not null]
+}
+
+Table session {
+  session_id int [primary key]
+  user_id int [ref: > useraccount.user_id]
+  uuid_token text [not null]
+  created timestamp [not null]
+}
+
+Table post {
+  post_id int [primary key]
+  user_id integer [ref: > useraccount.user_id]
+  title varchar(100) [not null] // unique
+  body varchar(500) [not null]
+  is_published bool [not null]
+  created timestamp [not null]
+}
+
+Table category {
+  category_id int [primary key]
+  name varchar(50) [not null] // unique
+}
+
+Table post_category {
+  post_category_id int [primary key]
+  post_id int [ref: > post.post_id]
+  category_id int [ref: > category.category_id]
+}
+
+Table comment {
+  comment_id int [primary key]
+  body varchar(100) [not null]
+  user_id int [ref: > useraccount.user_id]
+  post_id int [ref: > post.post_id]
+  created timestamp [not null]
+}
+
+Table post_vote {
+  post_vote_id int [primary key]
+  user_id int [ref: > useraccount.user_id]
+  post_id int [ref: > post.post_id]
+  vote int [not null] // 1 or -1
+}
+
+Table comment_vote {
+  comment_vote_id int [primary key]
+  user_id int [ref: > useraccount.user_id]
+  comment_id int [ref: > comment.comment_id]
+  vote int [not null] // 1 or -1
+}

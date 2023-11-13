@@ -1,0 +1,12 @@
+{{template "base" .}}
+
+{{define "title"}}
+	{{if .ErrorMessage}}
+		Error Page
+	{{end}}
+{{end}}
+{{define "body"}}
+	{{if .ErrorMessage}}
+		<h1>Oops! {{.ErrorMessage}}</h1>
+	{{end}}
+{{end}}

@@ -1,0 +1,66 @@
+{{template "base" .}}
+
+{{define "title"}}Post #{{.Post.ID}}{{end}}
+
+{{define "body"}}
+{{with .PostCategories}}
+	{{range .}}
+		<a href='/categories/{{.CategoryID}}'>#{{.Name}}</a>
+	{{end}}
+{{end}}
+{{with .Post}}
+	<div class='snippet'>
+		<div class='metadata'>
+			<strong>{{.Title}}</strong>
+			<span>#{{.ID}}</span>
+		</div>
+		{{if .Image}}
+		<img src="/uploads/{{.Image}}" alt="{{.Title}}" width="300" />
+		{{end}}
+		<p>{{.Body}}</p>
+		<div class='metadata'>
+			<time>{{humanDate .Created}}</time><br>
+			<time> written by <strong>{{.Author}}</strong></time>
+			<time>
+				<a href='/posts/{{.ID}}/vote/up'>+</a>
+				<strong>{{if .Votes}}{{.Votes}}{{else}}0{{end}}</strong>
+				<a href='/posts/{{.ID}}/vote/down'>-</a>
+			</time>
+		</div>
+	</div>
+	<br>
+{{end}}
+{{if .AuthenticatedUser}}
+	<form action='/comments/create/{{.Post.ID}}' method='POST'>
+		<div>
+		{{with .Form}}
+			{{with .Errors.Get "body"}}
+				<label class='error'>{{.}}</label>
+			{{end}}
+		{{end}}
+			<input type='text' name='body' value='{{with .Form}}{{.Get "body"}}{{end}}' placeholder='Write a comment..'>
+		</div>
+		<div>
+			<input type='submit' value='Comment'>
+		</div>
+	</form>
+{{end}}
+{{with .Comments}}
+	{{range .}}
+		<div class='comment'>
+			<div class='metadata'>
+				<time>commented by @{{.Username}}, {{.Created}}</time>
+				<time>
+					<a href='/posts/{{.PostID}}/comments/{{.ID}}/vote/up'>+</a>
+					<strong>{{if .Votes}}{{.Votes}}{{else}}0{{end}}</strong>
+					<a href='/posts/{{.PostID}}/comments/{{.ID}}/vote/down'>-</a>
+				</time>
+			</div>
+			<div class='metadata'>
+				<time>{{.Body}}</time>
+				<time></time>
+			</div>
+		</div>	
+	{{end}}
+{{end}}
+{{end}}
